@@ -1,6 +1,7 @@
 var tSize = 3,
   board = [],
-  cellIdInit = 0;
+  cellIdInit = 0,
+  turn = "X";
 
 /*
  * Initializes the Tic Tac Toe board and starts the game.
@@ -17,18 +18,25 @@ function init() {
       cell.style.background = "black";
       cell.style.width = "50px";
       cell.style.height = "50px";
-      // maybe we should add id to each cell by having a counter
+      cell.setAttribute("id", cellIdInit); // initiate cell with ID number
+      cell.addEventListener("click", function (event) {
+        console.log(event.target.id);
+      }); // assign function later
       boardrow.appendChild(cell);
+      cellIdInit++;
     }
     board.appendChild(boardrow);
   }
   tictactoe.appendChild(board);
 }
+
 /*
  * New game
  */
 function startNewGame() {
-  document.getElementById("myBtn").addEventListener("click", displayDate);
+  document
+    .getElementsByClassName("cell")
+    .addEventListener("click", displayDate);
 }
 
 /*
