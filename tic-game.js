@@ -4,11 +4,9 @@ var tSize = 3,
    xTurn = "X",
    oTurn = "O",
    currentTurn = xTurn,
-   moveNum = 0, // winner only from move 5+
    board = [],
    cellIdInit = 0,
    tieCounter = 0,
-   turn = "X",
    xidArray = [],
    oidArray = [],
    isWinner = false;
@@ -65,9 +63,8 @@ function handleClick(e) {
    } else if (currentTurn === oTurn) {
       oidArray.push(e.target.id);
    }
-   checkWinner();
-   console.log("x id array = " + xidArray);
-   console.log("o id array = " + oidArray);
+   //console.log("x id array = " + xidArray);
+   //console.log("o id array = " + oidArray);
    movesArray.push(currentTurn);
    console.log(movesArray);
    switchTurns();
@@ -87,7 +84,7 @@ function switchTurns() {
 
 function checkWinner(event) {
    /*
-   winConditions = [
+   winComb = [
    [0, 1, 2],
    [3, 4, 5],
    [6, 7, 8],
@@ -97,43 +94,43 @@ function checkWinner(event) {
    [0, 4, 8],
    [2, 4, 6]]
    */
-   // we run throught the array of array of winning combinations
-   winComb.forEach(function (condition) {
-      // for each combination
-      //
-      let cell1 = document.getElementById(condition[0]); // 0
-      let cell2 = document.getElementById(condition[1]); // 1
-      let cell3 = document.getElementById(condition[2]); // 2
-      // let allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, unlike the var keyword, which defines a variable globally
-
-      console.log("condition: " + condition[0]);
-      console.log("cell id = " + cell1.id);
-      console.log("cell= " + cell1.textContent);
-      console.log(cell1);
-      console.log(cell2);
-      console.log(cell3);
-      if (
-         cell1.textContent === "X" &&
-         cell2.textContent === "X" &&
-         cell3.textContent === "X"
-      ) {
-         isWinner = true;
-         alert("player X win");
-      } else if (
-         cell1.textContent === "O" &&
-         cell2.textContent === "O" &&
-         cell3.textContent === "O"
-      ) {
-         isWinner = true;
-         alert("player O win");
-      } else {
-         tieCounter++;
-         if (tieCounter === 72) {
-            isWinner = true;
-            alert("tie");
-         }
-      }
-   });
+   // we run throughoutt the array of array of winning combinations
+   winComb.forEach(checkConditions);
 }
 
+var checkConditions = function (condition) {
+   // for each combination
+   //
+   let cell1 = document.getElementById(condition[0]); // 0
+   let cell2 = document.getElementById(condition[1]); // 1
+   let cell3 = document.getElementById(condition[2]); // 2
+   // let allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, unlike the var keyword, which defines a variable globally
+
+   console.log("condition: " + condition[0]);
+   console.log("cell id = " + cell1.id);
+   console.log("cell= " + cell1.textContent);
+   if (
+      cell1.textContent === "X" &&
+      cell2.textContent === "X" &&
+      cell3.textContent === "X" &&
+      movesArray.length < 8
+   ) {
+      isWinner = true;
+      alert("player X win");
+   } else if (
+      cell1.textContent === "O" &&
+      cell2.textContent === "O" &&
+      cell3.textContent === "O" &&
+      movesArray.length < 8
+   ) {
+      isWinner = true;
+      alert("player O win");
+   } else {
+      console.log("movesArray: " + movesArray.length);
+      if (!isWinner && movesArray.length > 8) {
+         isWinner = true;
+         alert("tie");
+      }
+   }
+};
 init();
