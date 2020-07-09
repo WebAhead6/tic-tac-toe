@@ -4,24 +4,33 @@ var tSize = 3,
    xTurn = "X",
    oTurn = "O",
    currentTurn = xTurn,
-   moveNum = 0; // winner only from move 5+
-const winninngCombos = [
+   moveNum = 0, // winner only from move 5+
+   board = [],
+   cellIdInit = 0,
+   tieCounter = 0,
+   turn = "X",
+   xidArray = [],
+   oidArray = [],
+   isWinner = false;
+
+const winComb = [
    [0, 1, 2],
    [3, 4, 5],
    [6, 7, 8],
-   [0, 4, 8],
-   [2, 4, 6],
    [0, 3, 6],
    [1, 4, 7],
    [2, 5, 8],
+   [0, 4, 8],
+   [2, 4, 6],
 ];
-
 /*
  * Initializes the Tic Tac Toe board and starts the game.
  */
 function init() {
    const tictactoe = document.querySelector("#tictactoe");
    const board = document.createElement("table");
+   board.style.marginLeft = "auto";
+   board.style.marginRight = "auto";
    //board.style.textAlign = "center";   -- for later
    for (var i = 0; i < tSize; i++) {
       const boardrow = document.createElement("tr");
@@ -44,31 +53,28 @@ function init() {
    tictactoe.appendChild(board);
 }
 
-/*
- * New game
- */
-function startNewGame() {}
-
-/*
- * Check if a win or not
- */
-function win(clicked) {}
-/*
- * Sets clicked square and also updates the turn.
- */
 function handleClick(e) {
    // it takes the event as an argument
+   if (isWinner) {
+      return 1;
+   }
    const cell = e.target; //target takes cell we clicked, then assign it to cell
-   //console.log(currentTurn);
    e.target.textContent = currentTurn;
+   if (currentTurn === xTurn) {
+      xidArray.push(e.target.id);
+   } else if (currentTurn === oTurn) {
+      oidArray.push(e.target.id);
+   }
+   checkWinner();
+   console.log("x id array = " + xidArray);
+   console.log("o id array = " + oidArray);
    movesArray.push(currentTurn);
    console.log(movesArray);
    switchTurns();
-   //console.log(cell);
-   //Functions:
-   // check for win
-   // check for draw
-   // switch turns
+   if (movesArray.length > 4) {
+      //checks winner after the 5th move
+      checkWinner(e);
+   }
 }
 // obvious functionality
 function switchTurns() {
@@ -77,6 +83,57 @@ function switchTurns() {
    } else {
       currentTurn = oTurn;
    }
+}
+
+function checkWinner(event) {
+   /*
+   winConditions = [
+   [0, 1, 2],
+   [3, 4, 5],
+   [6, 7, 8],
+   [0, 3, 6],
+   [1, 4, 7],
+   [2, 5, 8],
+   [0, 4, 8],
+   [2, 4, 6]]
+   */
+   // we run throught the array of array of winning combinations
+   winComb.forEach(function (condition) {
+      // for each combination
+      //
+      let cell1 = document.getElementById(condition[0]); // 0
+      let cell2 = document.getElementById(condition[1]); // 1
+      let cell3 = document.getElementById(condition[2]); // 2
+      // let allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, unlike the var keyword, which defines a variable globally
+
+      console.log("condition: " + condition[0]);
+      console.log("cell id = " + cell1.id);
+      console.log("cell= " + cell1.textContent);
+      console.log(cell1);
+      console.log(cell2);
+      console.log(cell3);
+      if (
+         cell1.textContent === "X" &&
+         cell2.textContent === "X" &&
+         cell3.textContent === "X"
+      ) {
+         isWinner = true;
+         alert("player X win");
+      } else if (
+         cell1.textContent === "O" &&
+         cell2.textContent === "O" &&
+         cell3.textContent === "O"
+      ) {
+         isWinner = true;
+         alert("player O win");
+      } else {
+         tieCounter++;
+         if (tieCounter === 72) {
+            isWinner = true;
+            alert("tie");
+         }
+      }
+   });
 }
 
 init();
