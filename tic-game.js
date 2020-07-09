@@ -5,15 +5,13 @@ var tSize = 3,
    oTurn = "O",
    currentTurn = xTurn,
    board = [],
-   cellIdInit = 0,
-   tieCounter = 0,
    xidArray = [],
    oidArray = [],
    isWinner = false;
 
 const winComb = [
-   [0, 1, 2],
-   [3, 4, 5],
+   [0, 1, 2], //condition 1 -> condition[0] = 0, condition[1] = 1, condition[2] = 2
+   [3, 4, 5], // condition 2 -> condition[0] = 3, condition[1] = 4, condition[2] = 5
    [6, 7, 8],
    [0, 3, 6],
    [1, 4, 7],
@@ -100,8 +98,8 @@ function checkWinner(event) {
 
 var checkConditions = function (condition) {
    // for each combination
-   //
-   let cell1 = document.getElementById(condition[0]); // 0
+   // pull the element by the id (condition[0]) and check its content if matches to "X" or "O"
+   let cell1 = document.getElementById(condition[0]); // 0 gets element by ID = (condition[i])
    let cell2 = document.getElementById(condition[1]); // 1
    let cell3 = document.getElementById(condition[2]); // 2
    // let allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, unlike the var keyword, which defines a variable globally
@@ -117,6 +115,7 @@ var checkConditions = function (condition) {
    ) {
       isWinner = true;
       alert("player X win");
+      endGameReload();
    } else if (
       cell1.textContent === "O" &&
       cell2.textContent === "O" &&
@@ -125,12 +124,18 @@ var checkConditions = function (condition) {
    ) {
       isWinner = true;
       alert("player O win");
+      endGameReload();
    } else {
       console.log("movesArray: " + movesArray.length);
       if (!isWinner && movesArray.length > 8) {
          isWinner = true;
          alert("tie");
+         endGameReload();
       }
    }
 };
+// reloads tha page
+function endGameReload() {
+   location.reload();
+}
 init();
